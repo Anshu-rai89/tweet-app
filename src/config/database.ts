@@ -1,15 +1,14 @@
 import mongoose from "mongoose";
-
-const mongoUrl = process.env.MONGODB_URI || "";
+import dotenv from 'dotenv';
+dotenv.config({ path: ".env" });
+const mongoUrl = process.env.MONGO_URI || "";
 
 const initializeDatabase = function (): void {
     mongoose
         .connect(mongoUrl, {
             //@ts-ignore
             useNewUrlParser: true,
-            useCreateIndex: true,
-            useUnifiedTopology: true,
-            useFindAndModify: false,
+            useUnifiedTopology: true
         })
         .then(() => {
             console.info("Connected To DB");

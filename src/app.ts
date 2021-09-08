@@ -1,12 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import initializeDatabase from "@config/database";
+import initializeDatabase from "./config/database";
+import api from "./routes"
+import { errorHandler } from './middlewares/error'
+dotenv.config({ path: ".env" });
 const port = process.env.PORT;
-dotenv.config();
-
+//console.log("process.env", process.env);
 const app = express();
-const api = express.Router();
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +18,7 @@ initializeDatabase();
 
 
 app.use("/api/v1", api);
+app.use(errorHandler);
 
 app.listen(port, () => console.info('Server up & Running at', port))
 
