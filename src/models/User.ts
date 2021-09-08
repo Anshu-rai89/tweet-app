@@ -1,4 +1,4 @@
-import { Schema, Types, model } from "mongoose";
+import mongoose, { Schema, Types, model } from "mongoose";
 
 interface IUser {
     name: string,
@@ -23,13 +23,13 @@ const userSchema = new Schema<IUser>({
     },
     tweets: [
         {
-            type: Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "Tweets"
         }
     ],
     following: [
         {
-            type: Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref: "User"
         }
     ]

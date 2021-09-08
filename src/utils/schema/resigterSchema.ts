@@ -6,6 +6,12 @@ const user = joi.object({
     password: joi.string().min(6).max(1024).required()
 });
 
+const tweet = joi.object({
+    content: joi.string().min(2).required()
+});
+
+
 export default {
-    user
+    user,
+    tweet
 }
