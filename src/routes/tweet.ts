@@ -13,7 +13,7 @@ router.post(
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             //@ts-ignore
-            const data = await createTweet(req.body, req.user.id);
+            const data = await createTweet(req.body.content, req.user.id);
             res.status(201).json({ success: true, data: data });
         } catch (error) {
             next(error);
@@ -33,15 +33,12 @@ router.get(
         }
     },
 );
-
-const createTweet = async ({ content, userRef }: { content: string, userRef: Types.ObjectId }) => {
+const createTweet = async (content: string, userRef: Types.ObjectId) => {
     const user = await UserModel.findById(userRef);
-
     if (!user) {
         throw new CustomError("User does not exist", "BAD_INPUT", 400, {});
     }
     const tweet = await TweetModel.create({ content, userRef });
-
     user.tweets.push(tweet._id);
     await user.save();
     return tweet;
@@ -49,13 +46,13 @@ const createTweet = async ({ content, userRef }: { content: string, userRef: Typ
 
 }
 
-const getTweet = async ({ userRef }: { userRef: Types.ObjectId }) => {
+const getTweet = async (userRef: Types.ObjectId) => {
     const user = await UserModel.findById(userRef);
 
     if (!user) {
         throw new CustomError("User does not exist", "BAD_INPUT", 400, {});
     }
-    const tweet = await TweetModel.find({ userRef: { $in: user.following } });
+    const tweet = await TweetModel.find({ userRef: { $in: user.following } }).sort("-createdAt");
     return tweet;
 
 }

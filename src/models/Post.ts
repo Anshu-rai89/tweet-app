@@ -14,7 +14,7 @@ const postSchemaSchema = new Schema<IPost>({
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
     }
-})
+}, { timestamps: true })
 
-const Post = model<IPost>("User", postSchemaSchema);
+const Post = model<IPost>("Post", postSchemaSchema);
 export default Post

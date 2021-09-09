@@ -1,23 +1,20 @@
 import { Request } from "express";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { CustomError } from "./custom-error";
 import dotenv from 'dotenv';
 
 dotenv.config({ path: ".env" });
 const JWT_SECRET = process.env.JWT_SECRET || "";
 export const signToken = (
-    payload: Record<string, unknown>,
-    options?: SignOptions,
+    payload: Record<string, unknown>
 ): string =>
     jwt.sign(payload, JWT_SECRET, {
-        expiresIn: "1d",
-        ...options,
+        expiresIn: "1d"
     });
 
 export const verifyToken = (token: string): Record<string, unknown> => {
     try {
         const payload = jwt.verify(token, JWT_SECRET);
-
         if (typeof payload === "object") {
             return payload as Record<string, unknown>;
         }

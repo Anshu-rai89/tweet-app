@@ -10,6 +10,7 @@ const authMiddleware = async (
 ): Promise<void> => {
     try {
         const token = getTokenFromReq(req);
+        // console.log("token is", token);
         if (!token) {
             throw new CustomError(
                 "Authentication token not found.",
@@ -20,7 +21,6 @@ const authMiddleware = async (
         }
 
         const userId = verifyToken(token).id;
-
         if (!userId) {
             throw new CustomError(
                 "Authentication token is invalid.",
@@ -29,19 +29,9 @@ const authMiddleware = async (
                 {},
             );
         }
-
-        const user = await UserModel.findById(userId);
-        if (!user) {
-            throw new CustomError(
-                "Authentication token is invalid: User not found.",
-                "BAD_TOKEN",
-                401,
-                {},
-            );
-        }
         //@ts-ignore
         req.user = {
-            id: user._id
+            id: userId
         };
 
         next();

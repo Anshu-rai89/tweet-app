@@ -7,7 +7,7 @@ const user = joi.object({
 });
 
 const tweet = joi.object({
-    content: joi.string().min(2).required()
+    content: joi.string().min(2).max(144).required()
 });
 
 
