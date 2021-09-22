@@ -33,6 +33,18 @@ router.get(
         }
     },
 );
+router.post(
+    "update",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            //@ts-ignore
+            const data = await updateTweet(req);
+            res.status(200).json({ success: true, data: data });
+        } catch (error) {
+            next(error);
+        }
+    }
+)
 const createTweet = async (content: string, userRef: Types.ObjectId) => {
     const user = await UserModel.findById(userRef);
     if (!user) {
@@ -56,5 +68,24 @@ const getTweet = async (userRef: Types.ObjectId) => {
     return tweet;
 
 }
+const updateTweets = async (req: Request, res: Response, next: NextFunction) => {
+    //@ts-ignore
+    const tweet = updateTweet(req.params.id, req.body.content);
 
+    if (!tweet) {
+        throw new CustomError("Tweet does not exist", "BAD_INPUT", 400, {});
+    }
+    return res.status(200).json({
+        message: "tweet updated success",
+        data: tweet
+    })
+}
+const updateTweet = async (tweetId: Types.ObjectId, content: String) => {
+    const tweet = TweetModel.findByIdAndUpdate({
+        _id: tweetId,
+        content: content
+
+    })
+    return tweet;
+}
 export default router;
